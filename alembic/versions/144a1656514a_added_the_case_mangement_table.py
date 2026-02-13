@@ -1,8 +1,8 @@
-"""create books table
+"""added the case mangement table
 
-Revision ID: 20ff2bb369fb
-Revises: 
-Create Date: 2026-02-08 14:56:58.745093
+Revision ID: 144a1656514a
+Revises: 9a142aadbb59
+Create Date: 2026-02-13 17:50:21.559656
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '20ff2bb369fb'
-down_revision: Union[str, Sequence[str], None] = None
+revision: str = '144a1656514a'
+down_revision: Union[str, Sequence[str], None] = '9a142aadbb59'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

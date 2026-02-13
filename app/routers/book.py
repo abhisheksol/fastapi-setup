@@ -35,3 +35,9 @@ def delete(book_id: int, db: Session = Depends(get_db)):
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
     return {"message": "Book deleted"}
+
+
+@router.post("/product/", response_model=schemas.productResponse)
+def create_product(product: schemas.ProductCreate, db: Session = Depends(get_db)):
+    return crud.create_product(db, product)
+
