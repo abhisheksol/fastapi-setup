@@ -10,7 +10,7 @@ class BookCreate(BaseModel):
 
 
 class BookResponse(BookCreate):
-    id: int
+    id: UUID
 
     model_config = {
         "from_attributes": True

@@ -1,5 +1,6 @@
 # app/routers/book.py
 
+from app.routers import case_route
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -12,8 +13,11 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=schemas.BookResponse)
-def create(book: schemas.BookCreate, db: Session = Depends(get_db)):
-    return crud.create_book(db, book)
+def create(book: schemas.BookCreate,
+            db: Session = Depends(get_db),
+            current_user = Depends(case_route.get_current_user)):
+    print("---------- current_user -    ----------->", current_user)
+    return crud.create_book(db, book, current_user["sub"])
 
 
 @router.get("/", response_model=list[schemas.BookResponse])

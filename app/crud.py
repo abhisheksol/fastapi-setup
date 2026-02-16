@@ -5,10 +5,12 @@ from sqlalchemy.orm import Session
 from .models import Book, CaseManagementModel, Product
 from .schemas import BookCreate, CaseMangementCreate, ProductCreate
 
-def create_book(db: Session, book: BookCreate):
+def create_book(db: Session, book: BookCreate, user_id: UUID):
     db_book = Book(
         title=book.title,
         author=book.author,
+        # login user id 
+        user_id= user_id,
         price=book.price
     )
     db.add(db_book)

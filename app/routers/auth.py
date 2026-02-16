@@ -8,7 +8,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/register", response_model=schemas.UserResponse)
-def register(user: schemas.UserResponse, db: Session = Depends(get_db)):
+def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     hashed_pw = auth.hash_password(user.password)
 
     db_user = models.UserModel(
