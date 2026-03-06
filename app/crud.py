@@ -3,7 +3,7 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
 from .models import Book, CaseManagementModel, Product
-from .schemas import BookCreate, CaseMangementCreate, ProductCreate
+from app.schema.schemas import BookCreate, CaseMangementCreate, ProductCreate
 
 def create_book(db: Session, book: BookCreate, user_id: UUID):
     db_book = Book(

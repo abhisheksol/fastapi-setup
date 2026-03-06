@@ -1,24 +1,8 @@
-# from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-# from .manager import manager
-
-# router = APIRouter()
-
-# @router.websocket("/ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await manager.connect(websocket)
-
-#     try:
-#         while True:
-#             message = await websocket.receive_text()
-#             await manager.broadcast(f"Message: {message}")
-#     except WebSocketDisconnect:
-#         manager.disconnect(websocket)
-
-
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from uuid import UUID
 from app import auth
 from .manager import manager
+from jose import jwt
 
 router = APIRouter()
 
@@ -33,10 +17,12 @@ async def websocket_endpoint(websocket: WebSocket):
         return
 
     payload = auth.verify_token(token)
+    print("---------- payload -    ----------->", payload)
 
     if not payload:
         await websocket.close()
         return
+
 
     user_id = UUID(payload["sub"])
 
@@ -55,10 +41,12 @@ async def websocket_endpoint(websocket: WebSocket):
             to_user_id = UUID(data["to_user_id"])
             message = data["message"]
 
+
             await manager.send_personal_message(
                 to_user_id,
                 f"Message from {user_id}: {message}"
             )
+
 
     except WebSocketDisconnect:
         manager.disconnect(user_id)

@@ -6,7 +6,8 @@ from .database import engine
 from .models import Base
 from .routers import book , case_route, auth
 from app.websocket.routes import router as websocket_router
-
+# app\routers\mongodb_router\book_router.py
+from app.routers.mongodb_router import book_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -16,5 +17,6 @@ app.include_router(book.router)
 app.include_router(case_route.router)
 app.include_router(auth.router)
 app.include_router(websocket_router)
+app.include_router(book_router.router) 
 
 setup_admin(app)
