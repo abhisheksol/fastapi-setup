@@ -5,6 +5,10 @@ from .models import Book
 from .schemas import BookCreate
 
 def create_book(db: Session, book: BookCreate):
+
+    data= book.model_dump()
+
+    print("=========== data -    ----------->", data)
     db_book = Book(
         title=book.title,
         author=book.author,

@@ -1,6 +1,7 @@
 # app/database.py
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from motor.motor_asyncio import AsyncIOMotorClient
 
 DATABASE_URL = "postgresql://bookuser:bookpass@localhost:5432/bookdb"
 
@@ -22,3 +23,18 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+mongodb_url = "mongodb://admin:password@localhost:27017"
+
+from motor.motor_asyncio import AsyncIOMotorClient
+
+client = AsyncIOMotorClient(mongodb_url)
+db = client.fastapi
+
+
+books_collection = db.books
+
+
+async def mongo_db():
+    return db

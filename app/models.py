@@ -9,3 +9,5 @@ class Book(Base):
     title = Column(String, nullable=False)
     author = Column(String, nullable=False)
     price = Column(Float, nullable=False)
+
+
