@@ -1,10 +1,13 @@
 # app/routers/book.py
 
+from app.routers import case_route
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from .. import crud, schemas
+from .. import crud
+from app.schema import schemas 
+
 
 router = APIRouter(
     prefix="/django/books",
@@ -12,8 +15,11 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=schemas.BookResponse)
-def create(book: schemas.BookCreate, db: Session = Depends(get_db)):
-    return crud.create_book(db, book)
+def create(book: schemas.BookCreate,
+            db: Session = Depends(get_db),
+            current_user = Depends(case_route.get_current_user)):
+    print("---------- current_user -    ----------->", current_user)
+    return crud.create_book(db, book, current_user["sub"])
 
 
 @router.get("/", response_model=list[schemas.BookResponse])
@@ -35,3 +41,9 @@ def delete(book_id: int, db: Session = Depends(get_db)):
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
     return {"message": "Book deleted"}
+
+
+@router.post("/product/", response_model=schemas.productResponse)
+def create_product(product: schemas.ProductCreate, db: Session = Depends(get_db)):
+    return crud.create_product(db, product)
+

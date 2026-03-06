@@ -1,17 +1,16 @@
 # app/crud.py
 
+from uuid import UUID
 from sqlalchemy.orm import Session
-from .models import Book
-from .schemas import BookCreate
+from .models import Book, CaseManagementModel, Product
+from app.schema.schemas import BookCreate, CaseMangementCreate, ProductCreate
 
-def create_book(db: Session, book: BookCreate):
-
-    data= book.model_dump()
-
-    print("=========== data -    ----------->", data)
+def create_book(db: Session, book: BookCreate, user_id: UUID):
     db_book = Book(
         title=book.title,
         author=book.author,
+        # login user id 
+        user_id= user_id,
         price=book.price
     )
     db.add(db_book)
@@ -34,3 +33,39 @@ def delete_book(db: Session, book_id: int):
         db.delete(book)
         db.commit()
     return book
+
+
+
+def create_product(db: Session, product: ProductCreate):
+    db_product = Product(
+        name=product.name,
+        price=product.price,
+        description=product.description
+    )
+    db.add(db_product)
+    db.commit()
+    db.refresh(db_product)
+    return db_product
+
+
+
+def create_case(db: Session, case: CaseMangementCreate):
+    db_case = CaseManagementModel(
+        loan_amt = case.loan_amt,
+        loan_duration = case.loan_duration
+    )
+    db.add(db_case)
+    db.commit()
+    db.refresh(db_case)
+    return db_case
+
+
+
+# get cases
+
+def get_case(db: Session):
+    return db.query(CaseManagementModel).all()
+
+
+def get_case_by_id(db : Session, case_id: UUID):
+    return db.query(CaseManagementModel).filter(CaseManagementModel.id == case_id).first() 

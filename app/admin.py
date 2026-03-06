@@ -1,11 +1,18 @@
 # app/admin.py
-from sqladmin import Admin, ModelView
-from app.database import engine
-from app.models import Book
 
-class BookAdmin(ModelView, model=Book):
-    column_list = [Book.id, Book.title, Book.author, Book.price]
+from sqladmin import Admin, ModelView
+from app.database import engine, Base
+
 
 def setup_admin(app):
     admin = Admin(app, engine)
-    admin.add_view(BookAdmin)
+
+    # Loop through all registered models
+    for mapper in Base.registry.mappers:
+        model = mapper.class_
+
+        # Create dynamic ModelView
+        class DynamicAdmin(ModelView, model=model):
+            column_list = [c.name for c in model.__table__.columns]
+
+        admin.add_view(DynamicAdmin)
